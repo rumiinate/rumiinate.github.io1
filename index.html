@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashwani Pandey</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #0a0f1c;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Cursor Glow */
+.cursor {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, #00f2fe55, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(0,0,0,0.6);
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+}
+
+nav h2 { color: #00f2fe; }
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.typing {
+    font-size: 22px;
+    border-right: 2px solid #00f2fe;
+}
+
+/* Cards */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 40px;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    padding: 25px;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 25px #00f2fe;
+}
+
+/* Edit Button */
+.edit-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #00f2fe;
+    color: black;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Editable */
+[contenteditable="true"] {
+    outline: 2px dashed #00f2fe;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav>
+    <h2 contenteditable="false">Ashwani</h2>
+</nav>
+
+<section class="hero">
+    <h1 contenteditable="false">Ashwani Pandey 🚀</h1>
+    <div class="typing" id="typing"></div>
+</section>
+
+<div class="container">
+
+    <div class="card" contenteditable="false">
+        <h3>About</h3>
+        <p id="aboutText">Tech enthusiast learning automation & development.</p>
+    </div>
+
+    <div class="card" contenteditable="false">
+        <h3>Academics</h3>
+        <p>10th - 65% (2024)</p>
+        <p>12th - NIOS Commerce</p>
+    </div>
+
+    <div class="card" contenteditable="false">
+        <h3>Skills</h3>
+        <p>Python, RPA, Robotics</p>
+    </div>
+
+    <div class="card" contenteditable="false">
+        <h3>Contact</h3>
+        <p>Email: gohi89517@gmail.com</p>
+    </div>
+
+</div>
+
+<div class="edit-btn" onclick="toggleEdit()">✏️</div>
+
+<script>
+// Cursor Glow
+document.addEventListener("mousemove", e => {
+    const cursor = document.getElementById("cursor");
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+});
+
+// Typing Effect
+const texts = ["Future Developer", "Tech Enthusiast", "Learning Python"];
+let i=0,j=0,isDeleting=false;
+
+function type(){
+    let text = texts[i];
+    document.getElementById("typing").innerHTML = text.substring(0,j);
+
+    if(!isDeleting){ j++; }
+    else{ j--; }
+
+    if(j==text.length){ isDeleting=true; setTimeout(type,1000); return;}
+    if(j==0){ isDeleting=false; i=(i+1)%texts.length;}
+
+    setTimeout(type, isDeleting?50:100);
+}
+type();
+
+// Edit Mode
+let editing = false;
+
+function toggleEdit(){
+    editing = !editing;
+    document.querySelectorAll('.card, h1, h2').forEach(el=>{
+        el.contentEditable = editing;
+    });
+}
+
+// Save automatically
+document.addEventListener("input", ()=>{
+    localStorage.setItem("portfolioData", document.body.innerHTML);
+});
+
+// Load saved
+window.onload = ()=>{
+    let data = localStorage.getItem("portfolioData");
+    if(data){
+        document.body.innerHTML = data;
+    }
+};
+</script>
+
+</body>
+</html>
